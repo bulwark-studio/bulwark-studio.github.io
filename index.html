@@ -96,6 +96,32 @@ nav .container {
 .nav-links a { color: var(--text-secondary); font-size: 13px; font-weight: 400; letter-spacing: 0.5px; }
 .nav-links a:hover { color: var(--text-primary); text-decoration: none; }
 
+/* Hamburger */
+.nav-toggle {
+  display: none; background: none; border: none; cursor: pointer;
+  width: 32px; height: 32px; position: relative; z-index: 102;
+}
+.nav-toggle span {
+  display: block; width: 20px; height: 2px; background: var(--text-secondary);
+  margin: 5px auto; transition: all 0.3s ease; border-radius: 1px;
+}
+.nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* Mobile menu overlay */
+.nav-mobile {
+  display: none; position: fixed; inset: 0; z-index: 101;
+  background: rgba(10,11,16,0.95); backdrop-filter: blur(24px);
+  flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+}
+.nav-mobile.open { display: flex; }
+.nav-mobile a {
+  color: var(--text-primary); font-size: 18px; font-weight: 500;
+  letter-spacing: 1px;
+}
+.nav-mobile a:hover { color: var(--cyan); text-decoration: none; }
+
 /* HERO */
 .hero {
   min-height: 100vh;
@@ -518,6 +544,7 @@ footer .footer-links {
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .nav-links { display: none; }
+  .nav-toggle { display: block; }
   .hero h1 { letter-spacing: 6px; }
   .features-grid { grid-template-columns: 1fr; }
   .pricing-grid { grid-template-columns: 1fr; }
@@ -531,6 +558,7 @@ footer .footer-links {
 <nav>
   <div class="container">
     <div class="nav-brand">BULWARK</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="nav-links">
       <a href="#features">Features</a>
       <a href="#showcase">Screenshots</a>
@@ -542,6 +570,21 @@ footer .footer-links {
     </div>
   </div>
 </nav>
+
+<div class="nav-mobile" id="navMobile">
+  <a href="#features" onclick="closeMobile()">Features</a>
+  <a href="#showcase" onclick="closeMobile()">Screenshots</a>
+  <a href="#pricing" onclick="closeMobile()">Pricing</a>
+  <a href="#faq" onclick="closeMobile()">FAQ</a>
+  <a href="https://github.com/bulwark-studio/bulwark" target="_blank">GitHub</a>
+  <a href="https://x.com/BulwarkStudio" target="_blank">Twitter</a>
+  <a href="https://github.com/bulwark-studio/bulwark" target="_blank" style="color:var(--orange); font-weight:700;">Get Started</a>
+</div>
+<script>
+var navT=document.getElementById('navToggle'),navM=document.getElementById('navMobile');
+navT.onclick=function(){navT.classList.toggle('open');navM.classList.toggle('open');document.body.style.overflow=navM.classList.contains('open')?'hidden':'';};
+function closeMobile(){navT.classList.remove('open');navM.classList.remove('open');document.body.style.overflow='';}
+</script>
 
 <section class="hero">
   <div class="container">

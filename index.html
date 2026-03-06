@@ -261,6 +261,29 @@ nav .container {
   margin-right: 8px;
 }
 
+/* FAQ */
+.faq-list { max-width: 720px; }
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-q {
+  width: 100%; background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; font-family: 'JetBrains Mono', monospace;
+  font-size: 15px; font-weight: 500; color: var(--text-primary);
+  text-align: left; letter-spacing: 0.3px;
+}
+.faq-q:hover { color: var(--cyan); }
+.faq-q .arrow { font-size: 18px; color: var(--text-tertiary); transition: transform 0.2s; }
+.faq-item.open .arrow { transform: rotate(45deg); color: var(--cyan); }
+.faq-a {
+  max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+}
+.faq-item.open .faq-a { max-height: 200px; }
+.faq-a p {
+  padding: 0 0 20px; font-size: 13px; color: var(--text-secondary); line-height: 1.8;
+}
+
 /* FOOTER */
 footer {
   border-top: 1px solid var(--border);
@@ -296,6 +319,7 @@ footer .footer-links {
     <div class="nav-links">
       <a href="#features">Features</a>
       <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
       <a href="https://github.com/bulwark-studio/bulwark" target="_blank">GitHub</a>
       <a href="https://x.com/BulwarkStudio" target="_blank">Twitter</a>
       <a href="#" class="btn btn-primary" style="padding:8px 20px; font-size:12px;">Get Started</a>
@@ -437,6 +461,39 @@ footer .footer-links {
           <li>Dedicated engineer</li>
         </ul>
         <a href="#" class="btn btn-secondary" style="width:100%;justify-content:center;">Coming Soon</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Frequently asked questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is Bulwark really free? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Yes. The Community edition is free forever under AGPL-3.0. Self-host on your own server with full access to all 30+ views, Terminal, Docker, Git, DB Studio, and AI features. No usage limits, no time bombs.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">What does BYOK AI mean? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Bring Your Own Key. Bulwark shells out to your locally-installed CLI tools (Claude, Codex) using your own AI subscription. Zero AI cost for the product — you pay your provider directly.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">What are the system requirements? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Node.js 18+ and that's it. PostgreSQL is optional — the app works without it. Runs on any Linux or macOS server. 512MB RAM minimum, 1GB recommended.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">How many npm dependencies? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Four. Express, Socket.IO, pg, and node-pty. No React, no build step, no bundler. The entire frontend is vanilla JS with self-registering view modules.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I manage multiple servers? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Yes. The multi-server view aggregates metrics, health checks, and alerts across all your servers from a single dashboard. Available in Community edition.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between Community and Pro? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Community is single-user with all features. Pro adds team features: RBAC roles, audit logging, TOTP 2FA, and priority support. Pro and Team tiers are coming soon.</p></div>
       </div>
     </div>
   </div>

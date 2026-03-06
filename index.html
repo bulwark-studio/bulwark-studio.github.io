@@ -262,115 +262,121 @@ nav .container {
   margin-right: 8px;
 }
 
-/* SHOWCASE — Horizontal 3D Glass Gallery */
-.showcase { padding: 120px 0 80px; overflow: hidden; }
-.showcase .section-label, .showcase .section-title, .showcase .section-desc {
-  padding: 0 24px; max-width: 1200px; margin-left: auto; margin-right: auto;
-}
-.showcase .section-desc { margin-bottom: 32px; }
-.showcase-hint {
-  font-size: 12px; color: var(--text-tertiary); letter-spacing: 1px;
-  padding: 0 24px; max-width: 1200px; margin: 0 auto 24px;
-}
-.showcase-hint span { color: var(--cyan); }
+/* SHOWCASE — Grid Gallery + Lightbox */
+.showcase { padding: 120px 0 80px; }
 
-/* Scroll track */
-.gallery-track {
-  display: flex; gap: 24px;
-  padding: 40px 24px 60px;
-  overflow-x: auto; overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  perspective: 1200px;
-  scrollbar-width: none;
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
 }
-.gallery-track::-webkit-scrollbar { display: none; }
-
-/* Individual card */
 .gallery-card {
-  flex: 0 0 min(520px, 85vw);
-  scroll-snap-align: center;
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
+  position: relative; border-radius: 12px; overflow: hidden; cursor: pointer;
   background: var(--surface);
   border: 1px solid var(--border);
   border-top: 1px solid var(--border-top);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
-  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.5s ease;
-  transform-style: preserve-3d;
-  will-change: transform;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .gallery-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,211,238,0.15), 0 0 80px rgba(34,211,238,0.06);
+  transform: translateY(-4px);
+  border-color: rgba(34,211,238,0.2);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(34,211,238,0.1);
 }
-
-/* Screenshot image */
 .gallery-card img {
   width: 100%; height: auto; display: block;
-  border-bottom: 1px solid var(--border);
 }
-
-/* Glass info overlay — slides up on hover */
-.gallery-info {
+.gallery-card .card-label {
   position: absolute; bottom: 0; left: 0; right: 0;
-  background: rgba(10,11,16,0.80);
+  background: linear-gradient(transparent, rgba(10,11,16,0.95));
+  padding: 40px 16px 14px;
+}
+.gallery-card .card-tag {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--canvas); background: var(--cyan);
+  padding: 2px 8px; border-radius: 3px; margin-bottom: 6px;
+}
+.gallery-card .card-label h3 {
+  font-size: 13px; font-weight: 600; color: var(--text-primary);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(20px);
+  display: none; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.lightbox.open { display: flex; opacity: 1; }
+.lightbox-inner {
+  position: relative; max-width: 1100px; width: 95vw;
+  animation: lbIn 0.35s cubic-bezier(0.23,1,0.32,1);
+}
+@keyframes lbIn {
+  from { transform: scale(0.92) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.lightbox-inner img {
+  width: 100%; border-radius: 12px; display: block;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+.lightbox-glass {
+  background: rgba(14,14,18,0.80);
   backdrop-filter: blur(24px) saturate(180%);
-  border-top: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  border-radius: 0 0 12px 12px;
   padding: 20px 24px;
-  transform: translateY(calc(100% - 52px));
-  transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+  margin-top: -4px;
 }
-.gallery-card:hover .gallery-info {
-  transform: translateY(0);
+.lightbox-glass .lb-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--canvas); background: var(--cyan);
+  padding: 3px 10px; border-radius: 4px; margin-bottom: 8px;
 }
-
-.gallery-info .info-tag {
-  display: inline-block;
-  font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--canvas);
-  background: var(--cyan);
-  padding: 3px 10px;
-  border-radius: 4px;
-  margin-bottom: 8px;
+.lightbox-glass h3 {
+  font-size: 17px; font-weight: 600; color: var(--text-primary);
+  margin-bottom: 6px;
 }
-.gallery-info h3 {
-  font-size: 15px; font-weight: 600; margin-bottom: 6px;
-  color: var(--text-primary); letter-spacing: 0.3px;
+.lightbox-glass p {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.7;
 }
-.gallery-info p {
-  font-size: 12px; color: var(--text-secondary); line-height: 1.7;
-  opacity: 0; transition: opacity 0.3s ease 0.1s;
+.lightbox-close {
+  position: absolute; top: -44px; right: 0;
+  background: none; border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary); font-size: 14px;
+  width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; font-family: 'JetBrains Mono', monospace;
 }
-.gallery-card:hover .gallery-info p { opacity: 1; }
-
-/* Scroll progress bar */
-.gallery-progress {
-  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+.lightbox-close:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(14,14,18,0.70); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary); font-size: 20px;
+  width: 44px; height: 44px; border-radius: 10px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; font-family: 'JetBrains Mono', monospace;
 }
-.gallery-progress-bar {
-  height: 2px; background: var(--border); border-radius: 1px; overflow: hidden;
+.lightbox-nav:hover { color: var(--cyan); border-color: rgba(34,211,238,0.3); }
+.lightbox-prev { left: -60px; }
+.lightbox-next { right: -60px; }
+.lightbox-count {
+  position: absolute; top: -40px; left: 0;
+  font-size: 12px; color: var(--text-tertiary);
 }
-.gallery-progress-fill {
-  height: 100%; width: 0%; background: var(--cyan); border-radius: 1px;
-  transition: width 0.1s linear;
+@media (max-width: 1280px) {
+  .lightbox-prev { left: 12px; }
+  .lightbox-next { right: 12px; }
 }
-
-/* Navigation dots */
-.gallery-nav {
-  display: flex; gap: 8px; justify-content: center;
-  margin-top: 20px;
-}
-.gallery-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--border-glass); border: none; cursor: pointer;
-  transition: all 0.3s ease; padding: 0;
-}
-.gallery-dot.active {
-  background: var(--cyan); box-shadow: 0 0 8px rgba(34,211,238,0.4);
-  width: 24px; border-radius: 4px;
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr; }
 }
 
 /* FAQ */
@@ -513,124 +519,113 @@ footer .footer-links {
   </div>
 </section>
 
-<section class="showcase" id="showcase">
-  <div class="section-label" style="padding:0 24px; max-width:1200px; margin:0 auto;">Inside the Dashboard</div>
-  <h2 class="section-title" style="padding:0 24px; max-width:1200px; margin:0 auto 16px;">See it in action.</h2>
-  <p class="section-desc" style="padding:0 24px; max-width:1200px; margin:0 auto 8px;">Every pixel built for dark terminals and glass panels. Scroll to explore.</p>
-  <p class="showcase-hint"><span>&larr;</span> Drag or scroll horizontally <span>&rarr;</span></p>
-
-  <div class="gallery-track" id="galleryTrack">
-    <div class="gallery-card">
-      <img src="screenshots/Dashboard_open_ai_banner_3.png" alt="Dashboard" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">Overview</span>
-        <h3>AI-Powered Dashboard</h3>
-        <p>98/100 health score, AI briefing, command hub with one-click diagnostics, deploy checks, and live CPU/memory/disk metrics at a glance.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="screenshots/terminal_1.png" alt="Terminal AI" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">DevOps</span>
-        <h3>Terminal AI</h3>
-        <p>Full PTY terminal with AI assistant. Natural language commands — "SSH into production," "check disk space," "restart Docker containers." Shell, AI, and Vault tabs.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="screenshots/sql_Editor.png" alt="SQL Editor" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">Database</span>
-        <h3>SQL Editor</h3>
-        <p>Supabase-style query editor with syntax highlighting, autocomplete, query history, saved queries, Ask Claude AI generation, and CSV export.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="screenshots/Docker_9.png" alt="Docker" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">Infrastructure</span>
-        <h3>Docker Fleet</h3>
-        <p>Native Docker Engine API. Container stats, log streaming, multi-host connections, AI fleet intelligence. Start, stop, restart, inspect from the dashboard.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="screenshots/tables_3.png" alt="Table Browser" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">Database</span>
-        <h3>Table Browser</h3>
-        <p>Two-panel explorer with columns, data, constraints, foreign keys, and indexes tabs. Filter tables, inspect schemas, open in SQL Editor.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="screenshots/tickets_sidebar.png" alt="Kanban Board" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">Operations</span>
-        <h3>Kanban Tickets</h3>
-        <p>Drag-and-drop ticket board with AI triage. Pending, Analyzing, Fixing, Testing, Awaiting Approval, Approved, Deployed — full lifecycle tracking.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="screenshots/roles_6.png" alt="Roles" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">Security</span>
-        <h3>Roles &amp; Permissions</h3>
-        <p>PostgreSQL role manager with AI security audit, permission heatmap, table-level CRUD matrix. Create least-privilege roles with AI generation.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="screenshots/Metrics_top_5.png" alt="Metrics" loading="lazy">
-      <div class="gallery-info">
-        <span class="info-tag">Monitoring</span>
-        <h3>Real-Time Metrics</h3>
-        <p>AI performance analysis, CPU/memory/connections/uptime gauges, process telemetry table with PID, user, CPU%, memory, and command details.</p>
-      </div>
-    </div>
+<section class="showcase section" id="showcase">
+  <div class="container">
+    <div class="section-label">Inside the Dashboard</div>
+    <h2 class="section-title">See it in action.</h2>
+    <p class="section-desc">Click any screenshot to expand. Every pixel built for dark terminals and glass panels.</p>
   </div>
 
-  <div class="gallery-progress"><div class="gallery-progress-bar"><div class="gallery-progress-fill" id="galleryFill"></div></div></div>
-  <div class="gallery-nav" id="galleryNav"></div>
+  <div class="gallery-grid">
+    <div class="gallery-card" data-i="0">
+      <img src="screenshots/Dashboard_open_ai_banner_3.png" alt="Dashboard" loading="lazy">
+      <div class="card-label"><span class="card-tag">Overview</span><h3>AI-Powered Dashboard</h3></div>
+    </div>
+    <div class="gallery-card" data-i="1">
+      <img src="screenshots/terminal_1.png" alt="Terminal AI" loading="lazy">
+      <div class="card-label"><span class="card-tag">DevOps</span><h3>Terminal AI</h3></div>
+    </div>
+    <div class="gallery-card" data-i="2">
+      <img src="screenshots/sql_Editor.png" alt="SQL Editor" loading="lazy">
+      <div class="card-label"><span class="card-tag">Database</span><h3>SQL Editor</h3></div>
+    </div>
+    <div class="gallery-card" data-i="3">
+      <img src="screenshots/Docker_9.png" alt="Docker" loading="lazy">
+      <div class="card-label"><span class="card-tag">Infrastructure</span><h3>Docker Fleet</h3></div>
+    </div>
+    <div class="gallery-card" data-i="4">
+      <img src="screenshots/tables_3.png" alt="Table Browser" loading="lazy">
+      <div class="card-label"><span class="card-tag">Database</span><h3>Table Browser</h3></div>
+    </div>
+    <div class="gallery-card" data-i="5">
+      <img src="screenshots/tickets_sidebar.png" alt="Kanban Board" loading="lazy">
+      <div class="card-label"><span class="card-tag">Operations</span><h3>Kanban Tickets</h3></div>
+    </div>
+    <div class="gallery-card" data-i="6">
+      <img src="screenshots/roles_6.png" alt="Roles" loading="lazy">
+      <div class="card-label"><span class="card-tag">Security</span><h3>Roles &amp; Permissions</h3></div>
+    </div>
+    <div class="gallery-card" data-i="7">
+      <img src="screenshots/Metrics_top_5.png" alt="Metrics" loading="lazy">
+      <div class="card-label"><span class="card-tag">Monitoring</span><h3>Real-Time Metrics</h3></div>
+    </div>
+  </div>
 </section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <span class="lightbox-count" id="lbCount"></span>
+    <button class="lightbox-close" id="lbClose">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lbPrev">&larr;</button>
+    <button class="lightbox-nav lightbox-next" id="lbNext">&rarr;</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lightbox-glass">
+      <span class="lb-tag" id="lbTag"></span>
+      <h3 id="lbTitle"></h3>
+      <p id="lbDesc"></p>
+    </div>
+  </div>
+</div>
 
 <script>
 (function(){
-  const track = document.getElementById('galleryTrack');
-  const fill = document.getElementById('galleryFill');
-  const nav = document.getElementById('galleryNav');
-  const cards = track.querySelectorAll('.gallery-card');
-  const n = cards.length;
+  var slides = [
+    { tag:'Overview', title:'AI-Powered Dashboard', desc:'98/100 health score, AI briefing, command hub with one-click diagnostics, deploy checks, and live CPU/memory/disk metrics at a glance.' },
+    { tag:'DevOps', title:'Terminal AI', desc:'Full PTY terminal with AI assistant. Natural language commands \u2014 \u201cSSH into production,\u201d \u201ccheck disk space,\u201d \u201crestart Docker containers.\u201d Shell, AI, and Vault tabs.' },
+    { tag:'Database', title:'SQL Editor', desc:'Supabase-style query editor with syntax highlighting, autocomplete, query history, saved queries, Ask Claude AI generation, and CSV export.' },
+    { tag:'Infrastructure', title:'Docker Fleet', desc:'Native Docker Engine API. Container stats, log streaming, multi-host connections, AI fleet intelligence. Start, stop, restart, inspect from the dashboard.' },
+    { tag:'Database', title:'Table Browser', desc:'Two-panel explorer with columns, data, constraints, foreign keys, and indexes tabs. Filter tables, inspect schemas, open in SQL Editor.' },
+    { tag:'Operations', title:'Kanban Tickets', desc:'Drag-and-drop ticket board with AI triage. Pending, Analyzing, Fixing, Testing, Awaiting Approval, Approved, Deployed \u2014 full lifecycle tracking.' },
+    { tag:'Security', title:'Roles & Permissions', desc:'PostgreSQL role manager with AI security audit, permission heatmap, table-level CRUD matrix. Create least-privilege roles with AI generation.' },
+    { tag:'Monitoring', title:'Real-Time Metrics', desc:'AI performance analysis, CPU/memory/connections/uptime gauges, process telemetry table with PID, user, CPU%, memory, and command details.' }
+  ];
+  var imgs = document.querySelectorAll('.gallery-card img');
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbTag = document.getElementById('lbTag');
+  var lbTitle = document.getElementById('lbTitle');
+  var lbDesc = document.getElementById('lbDesc');
+  var lbCount = document.getElementById('lbCount');
+  var cur = 0;
 
-  // Create dots
-  cards.forEach((_, i) => {
-    const dot = document.createElement('button');
-    dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
-    dot.onclick = () => cards[i].scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
-    nav.appendChild(dot);
+  function show(i) {
+    cur = (i + slides.length) % slides.length;
+    lbImg.src = imgs[cur].src;
+    lbTag.textContent = slides[cur].tag;
+    lbTitle.textContent = slides[cur].title;
+    lbDesc.textContent = slides[cur].desc;
+    lbCount.textContent = (cur+1) + ' / ' + slides.length;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.gallery-card').forEach(function(c) {
+    c.addEventListener('click', function() { show(parseInt(c.dataset.i)); });
   });
-  const dots = nav.querySelectorAll('.gallery-dot');
-
-  // Progress + active dot on scroll
-  track.addEventListener('scroll', () => {
-    const pct = track.scrollLeft / (track.scrollWidth - track.clientWidth) * 100;
-    fill.style.width = Math.min(pct, 100) + '%';
-    const center = track.scrollLeft + track.clientWidth / 2;
-    let closest = 0, minDist = Infinity;
-    cards.forEach((c, i) => {
-      const d = Math.abs(c.offsetLeft + c.offsetWidth/2 - center);
-      if(d < minDist){ minDist = d; closest = i; }
-    });
-    dots.forEach((d, i) => d.className = 'gallery-dot' + (i === closest ? ' active' : ''));
-  });
-
-  // 3D tilt on mousemove
-  cards.forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
-      card.style.transform = `translateY(-8px) scale(1.02) rotateY(${x*8}deg) rotateX(${-y*6}deg)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.getElementById('lbPrev').addEventListener('click', function() { show(cur - 1); });
+  document.getElementById('lbNext').addEventListener('click', function() { show(cur + 1); });
+  lb.addEventListener('click', function(e) { if (e.target === lb) close(); });
+  document.addEventListener('keydown', function(e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
   });
 })();
 </script>
